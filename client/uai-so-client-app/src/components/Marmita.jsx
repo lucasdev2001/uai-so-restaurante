@@ -1,8 +1,8 @@
 const marmita = (props) => {
     return <>
-        <div className="card" style={{ width: "10rem" }}>
+        <div className="card m-3" style={{ width: "14rem" }}>
             <div className="card-body">
-                <h5 className="card-title">{props.idPedido}</h5>
+                <h5 className="card-title">Marmita</h5>
                 <ul className="list-group">
                     <li className="list-group-item">{props.arroz}</li>
                     <li className="list-group-item">{props.feijao}</li>

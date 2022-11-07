@@ -5,6 +5,7 @@ import reportWebVitals from './reportWebVitals';
 import {createBrowserRouter,RouterProvider} from "react-router-dom";
 import App from './routes/App';
 import Adm from './routes/Adm';
+import Cozinha from './routes/Cozinha';
 
 const router = createBrowserRouter([
   {
@@ -14,6 +15,10 @@ const router = createBrowserRouter([
   {
     path: "/adm",
     element: <Adm />,
+  },
+  {
+    path: "/cozinha",
+    element: <Cozinha />,
   },
 ]);
 

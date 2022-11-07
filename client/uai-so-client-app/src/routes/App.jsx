@@ -73,14 +73,15 @@ function App() {
       length: 3,
       count: 1,
       charset: "0123456789abc"
-  });
+    });
 
     let pedidoParaServer = {
       _id: idPedido.toString(),
+      liberadoParaCozinha:false,
       marmitas: pedidoPessoa
     }
 
-    fetch('/api', {
+    fetch('/api/pedidos', {
       method: "POST",
       body: JSON.stringify(pedidoParaServer),
       headers: { "Content-type": "application/json; charset=UTF-8" }
@@ -88,9 +89,9 @@ function App() {
       .then(response => response.json())
       .then(json => console.log(json))
       .catch(err => console.log(err))
-      window.alert(`Anote o código do seu pedido: ${idPedido}`)
+    window.alert(`Anote o código do seu pedido: ${idPedido}`)
 
-      setPedidoPessoa([]);
+    setPedidoPessoa([]);
 
   }
 
