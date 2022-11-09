@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import voucher_codes from 'voucher-code-generator'
+import InputRotativo from '../components/InputRotativo';
 function App() {
   const [marmita, setMarmita] = useState({
     arrozEscolhido: "",
@@ -77,7 +78,7 @@ function App() {
 
     let pedidoParaServer = {
       _id: idPedido.toString(),
-      liberadoParaCozinha:false,
+      liberadoParaCozinha: false,
       marmitas: pedidoPessoa
     }
 
@@ -95,6 +96,55 @@ function App() {
 
   }
 
+  const carnes = [
+    {
+      name:'carne',
+      value:'Filé',
+    },
+    {
+      name:'carne',
+      value:'Linguiça',
+    },
+    {
+      name:'carne',
+      value:'Churrasco',
+    },
+  ]
+
+  const ingredientesRotatorios = {
+    carnes:[
+      {
+        name:'carne',
+        value:'Filé',
+      },
+      {
+        name:'carne',
+        value:'Linguiça',
+      },
+      {
+        name:'carne',
+        value:'Churrasco',
+      },
+    ],
+    complementos:[
+      {
+        name:'complemento',
+        value:'Fritas',
+      },
+      {
+        name:'complemento',
+        value:'Purê',
+      },
+      {
+        name:'complemento',
+        value:'Abóbora',
+      },
+      {
+        name:'complemento',
+        value:'Farofa',
+      },
+    ]
+  }
 
   return (
     <div className="App">
@@ -165,42 +215,31 @@ function App() {
 
                 <legend>Escolha até duas carnes</legend>
                 <div className='form-check mb-3'>
-                  <input className='form-check-input' type={'checkbox'} name={'carne'} value={'filé'} onClick={limitadorCarne}></input>
-                  <label className="form-check-label">
-                    Filé
-                  </label>
-                  <br />
-                  <input className='form-check-input' type={'checkbox'} name={'carne'} value={'linguiça'} onClick={limitadorCarne} ></input>
-                  <label className="form-check-label">
-                    Linguiça
-                  </label>
-                  <br />
-                  <input className='form-check-input' type={'checkbox'} name={'carne'} value={'churrasco'} onClick={limitadorCarne}></input>
-                  <label className="form-check-label">
-                    churrasco
-                  </label>
+                  {/* {carnes.map((e)=>{
+                    return(
+                      <>
+                      <InputRotativo name={e.name} value={e.value} onClick={limitadorCarne}/>
+                      </>
+                    )
+                  })} */}
+
+                  {ingredientesRotatorios.carnes.map((e)=>{
+                    return(
+                      <>
+                      <InputRotativo name={e.name} value={e.value} onClick={limitadorCarne}/>
+                      </>
+                    )
+                  })}
                 </div>
                 <legend>Escolha até dois complementos</legend>
                 <div className='form-check mb-3'>
-                  <input className='form-check-input' type={'checkbox'} name={'complemento'} value={'fritas'} onClick={limitadorComplemento}></input>
-                  <label className="form-check-label">
-                    Fritas
-                  </label>
-                  <br />
-                  <input className='form-check-input' type={'checkbox'} name={'complemento'} value={'purê'} onClick={limitadorComplemento}></input>
-                  <label className="form-check-label">
-                    Purê
-                  </label>
-                  <br />
-                  <input className='form-check-input' type={'checkbox'} name={'complemento'} value={'farofa'} onClick={limitadorComplemento}></input>
-                  <label className="form-check-label">
-                    Farofa
-                  </label>
-                  <br />
-                  <input className='form-check-input' type={'checkbox'} name={'complemento'} value={'abóbora'} onClick={limitadorComplemento}></input>
-                  <label className="form-check-label">
-                    Abóbora
-                  </label>
+                {ingredientesRotatorios.complementos.map((e)=>{
+                    return(
+                      <>
+                      <InputRotativo name={e.name} value={e.value} onClick={limitadorCarne}/>
+                      </>
+                    )
+                  })}
                 </div>
 
                 <button type="submit" className="btn btn-primary">Adicionar ao carrinho 🛒</button>

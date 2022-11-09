@@ -6,6 +6,7 @@ import {createBrowserRouter,RouterProvider} from "react-router-dom";
 import App from './routes/App';
 import Adm from './routes/Adm';
 import Cozinha from './routes/Cozinha';
+import Cardapio from './routes/Cardapio';
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
   {
     path: "/cozinha",
     element: <Cozinha />,
+  },
+  {
+    path: "/cardapio",
+    element: <Cardapio />,
   },
 ]);
 
