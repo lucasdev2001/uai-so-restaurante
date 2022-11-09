@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import voucher_codes from 'voucher-code-generator'
 import InputRotativo from '../components/InputRotativo';
-function App() {
+function Root() {
   const [marmita, setMarmita] = useState({
     arrozEscolhido: "",
     feijaoEscolhido: "",
@@ -236,7 +236,7 @@ function App() {
                 {ingredientesRotatorios.complementos.map((e)=>{
                     return(
                       <>
-                      <InputRotativo name={e.name} value={e.value} onClick={limitadorCarne}/>
+                      <InputRotativo name={e.name} value={e.value} onClick={limitadorComplemento}/>
                       </>
                     )
                   })}
@@ -261,4 +261,4 @@ function App() {
   );
 }
 
-export default App;
+export default Root;
