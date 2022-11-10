@@ -13,6 +13,14 @@ const Pedido = mongoose.model('Pedido', {
   marmitas: Array
 });
 
+const Cardapio = mongoose.model('Cardapio',{
+  _id: String,
+  arroz: Array,
+  feijão: Array,
+  carnes: Array,
+  complementos: Array,
+})
+
 
 app.post('/api/pedidos', jsonParser, (req, res) => {
   let resposta = req.body;
@@ -49,6 +57,12 @@ app.get('/api/pedidos', async (req, res) => {
 app.get('/api/pedidosliberados', async (req, res) => {
   const pedidosLiberados = await Pedido.find({liberadoParaCozinha:true}).lean().exec();
   res.send(pedidosLiberados)
+})
+
+app.get('/api/cardapio', async(req,res)=>{
+  const cardapio = await Cardapio.find({}).lean().exec();
+  console.log(cardapio);
+  res.json(cardapio) 
 })
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
