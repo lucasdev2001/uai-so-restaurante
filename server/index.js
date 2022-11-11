@@ -61,8 +61,18 @@ app.get('/api/pedidosliberados', async (req, res) => {
 
 app.get('/api/cardapio', async(req,res)=>{
   const cardapio = await Cardapio.find({}).lean().exec();
-  console.log(cardapio);
-  res.json(cardapio) 
+  const[primeiroCardapio] = cardapio;
+  res.send(primeiroCardapio);
+})
+
+app.put('/api/cardapio',jsonParser, async (req,res)=>{
+  try {
+    console.log(req.body);
+    const cardapioPorId = await Cardapio.findOneAndUpdate({ _id: 'Segunda-Feira' },req.body).exec();
+    res.send(cardapioPorId)
+  } catch (error) {
+    console.log(error);
+  }
 })
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));

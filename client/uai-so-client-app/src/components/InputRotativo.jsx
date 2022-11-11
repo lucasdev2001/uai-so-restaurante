@@ -1,8 +1,8 @@
 const InputRotativo = (props) => {
     return (
         <>
-            <input className='form-check-input' type={'checkbox'} name={props.name} value={props.value} onClick={props.onClick}></input>
-            <label className="form-check-label">
+            <input className='form-check-input fs-1' type={props.type} name={props.name} value={props.value} onClick={props.onClick} onChange={props.onChange}></input>
+            <label className="form-check-label fs-1">
                 {props.value}
             </label>
             <br/>

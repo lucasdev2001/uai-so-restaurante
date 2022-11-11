@@ -24,9 +24,7 @@ const Adm = () => {
     const adicionarItemCardapio = (event) => {
         const target = event.target;
         const name = target.name;
-
         let arrTemp = [];
-
         switch (name) {
             case 'arroz':
                 arrTemp = cardapio.arroz;
@@ -55,12 +53,24 @@ const Adm = () => {
 
     }
 
+
+    const editarCardapio = (e) => {
+        fetch('/api/cardapio/', {
+            method: "PUT",
+            body: JSON.stringify(cardapio),
+            headers: { "Content-type": "application/json; charset=UTF-8" }
+        })
+            .then(response => response.json())
+            .then(json => console.log(json))
+            .catch(err => console.log(err))
+    }
+
     return (
         <>
             <h1 className="text-center">Área do Administrador</h1>
             <div className="mb-3 text-center">
                 <h2>Montar Cardápio</h2>
-                <button className="btn btn-primary">Confirmar Alterações</button>
+                <button className="btn btn-primary" onClick={editarCardapio}>Confirmar Alterações</button>
                 <div className="row">
                     <div className="col">
                         <h3>Arroz</h3>

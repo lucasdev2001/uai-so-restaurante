@@ -23,9 +23,14 @@ const Cozinha = () => {
             window.alert("ok")
         }
     }
+
+    function btnChrome_onclick() {
+        document.documentElement.webkitRequestFullScreen();
+      }
+
     return (
         <>
-            <main>
+            <main onClick={btnChrome_onclick}>
                 <div className="container-fluid">
                     <h1 className="text-center">Cozinha</h1>
                     <div className="row">
@@ -55,6 +60,7 @@ const Cozinha = () => {
                         })}
                     </div>
                 </div>
+                <button onClick={btnChrome_onclick}> clikca</button>
             </main>
         </>
     )
