@@ -11,7 +11,17 @@ function Root() {
       .then((data) => setCardapio(data));
   }, []);
 
-  const [etapa,setEtapa] = useState(0);
+  let [etapa,setEtapa] = useState(0);
+
+  const nomesEtapas =[
+    "Escolha seu arroz",
+    "Escolha seu feijão",
+    "Aceita macarrão ?",
+    "Aceita Salada ?",
+    "Escolha até duas carnes",
+    "Escolha até dois complementos",
+    "Seu pedido",
+  ];
 
   const [marmita, setMarmita] = useState({
     arrozEscolhido: "",
@@ -24,8 +34,52 @@ function Root() {
 
   const [pedidoPessoa, setPedidoPessoa] = useState([]);
 
-  const handleEtapa = (e)=>{
+  const handleEtapa = (e) => {
+    let id = e.target.id
+    let etapas = document.querySelectorAll('.etapa');
+    const nomeEtapa = document.querySelector('#nome-etapa');
+    const barraProgresso = document.querySelector('#barra-progresso');
 
+    function slider(etapa) {
+          etapas.forEach((e)=>{
+            e.setAttribute('hidden',true);
+          })
+          etapas[etapa].removeAttribute('hidden')
+          document.getElementById('voltar').removeAttribute('disabled')
+          nomeEtapa.innerHTML = nomesEtapas[etapa];
+    }
+
+    switch (id) {
+      case 'avançar':
+        if (etapa < nomesEtapas.length - 1) {
+          etapa++;
+          barraProgresso.style.width = `${(100/nomesEtapas.length + 3) * etapa}%`;
+          slider(etapa);
+          console.log(etapa);
+          
+        }
+
+        break;
+      case 'voltar':
+        if (etapa > 0) {
+          etapa--;
+          barraProgresso.style.width = `${(100/nomesEtapas.length + 3) * etapa}%`;
+          slider(etapa);
+        }
+        if (etapa === 0) {
+          document.getElementById('voltar').setAttribute('disabled',true);
+        }
+        break;
+
+      default: console.log('error');
+        break;
+    }
+  }
+
+  const desativarBotao = ()=>{
+    if (etapa === 0) {
+      document.getElementById('voltar').setAttribute('disabled',true);
+    }
   }
 
   const handInputchange = (event) => {
@@ -118,112 +172,112 @@ function Root() {
     <div className="App">
       <main>
         <div className='container-fluid'>
-          <form  method="POST" onSubmit={onSubmit} id='form-marmita'>
-          <h2 className='text-center display-1'>Escolha seu arroz</h2>
-          <div class="progress">
-            <div class="progress-bar bg-bg-primary" role="progressbar" style={{ width: "20%" }} aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-          </div>
-          <div>
+          <form method="POST" onSubmit={onSubmit} id='form-marmita'>
+            <h2 className='text-center display-1' id='nome-etapa'>Escolha seu arroz</h2>
+            <div className="progress">
+              <div className="progress-bar bg-success" role="progressbar" style={{ width: "0%" }} aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" id='barra-progresso'></div>
+            </div>
+            <div>
 
-            <div>
-              <div className='d-flex justify-content-center mt-5'>
-                <div className='form-check mb-3'>
-                  {!cardapio ? "Loading..." : cardapio.arroz.map((e) => {
-                    return (
-                      <>
-                        <InputRotativo value={e} name={'arrozEscolhido'} type={'radio'} onChange={handInputchange} />
-                      </>
-                    )
-                  })}
-                  <input className='form-check-input fs-1' type={'radio'} name={'arrozEscolhido'} value={""} onChange={handInputchange} required></input>
-                  <label className="form-check-label fs-1">
-                    Sem arroz
-                  </label>
+              <div className='etapa' id={0}>
+                <div className='d-flex justify-content-center mt-5'>
+                  <div className='form-check mb-3'>
+                    {!cardapio ? "Loading..." : cardapio.arroz.map((e) => {
+                      return (
+                        <>
+                          <InputRotativo value={e} name={'arrozEscolhido'} type={'radio'} onChange={handInputchange} />
+                        </>
+                      )
+                    })}
+                    <input className='form-check-input fs-1' type={'radio'} name={'arrozEscolhido'} value={""} onChange={handInputchange} required></input>
+                    <label className="form-check-label fs-1">
+                      Sem arroz
+                    </label>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div>
-              <div className='d-flex justify-content-center mt-5'>
-                <div className='form-check mb-3'>
-                  {!cardapio ? "Loading..." : cardapio.feijão.map((e) => {
-                    return (
-                      <>
-                        <InputRotativo value={e} name={'feijaoEscolhido'} type={'radio'} onChange={handInputchange} />
-                      </>
-                    )
-                  })}
-                  <input className='form-check-input fs-1' type={'radio'} name={'feijaoEscolhido'} value={""} onChange={handInputchange} required></input>
-                  <label className="form-check-label fs-1">
-                    Sem feijão
-                  </label>
+              <div className='etapa' id={1} hidden>
+                <div className='d-flex justify-content-center mt-5'>
+                  <div className='form-check mb-3'>
+                    {!cardapio ? "Loading..." : cardapio.feijão.map((e) => {
+                      return (
+                        <>
+                          <InputRotativo value={e} name={'feijaoEscolhido'} type={'radio'} onChange={handInputchange} />
+                        </>
+                      )
+                    })}
+                    <input className='form-check-input fs-1' type={'radio'} name={'feijaoEscolhido'} value={""} onChange={handInputchange} required></input>
+                    <label className="form-check-label fs-1">
+                      Sem feijão
+                    </label>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div>
-              <div className='d-flex justify-content-center mt-5'>
-                <div className='form-check mb-3'>
-                  <input className='form-check-input fs-1' type={'radio'} name={'macarrao'} value={'Macarrão'} onChange={handInputchange} required></input>
-                  <label className="form-check-label fs-1">
-                    Sim
-                  </label>
-                  <br />
-                  <input className='form-check-input fs-1' type={'radio'} name={'macarrao'} value={''} onChange={handInputchange} required></input>
-                  <label className="form-check-label fs-1">
-                    Não
-                  </label>
+              <div className='etapa' id={2} hidden>
+                <div className='d-flex justify-content-center mt-5'>
+                  <div className='form-check mb-3'>
+                    <input className='form-check-input fs-1' type={'radio'} name={'macarrao'} value={'Macarrão'} onChange={handInputchange} required></input>
+                    <label className="form-check-label fs-1">
+                      Sim
+                    </label>
+                    <br />
+                    <input className='form-check-input fs-1' type={'radio'} name={'macarrao'} value={''} onChange={handInputchange} required></input>
+                    <label className="form-check-label fs-1">
+                      Não
+                    </label>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div>
-              <div className='d-flex justify-content-center mt-5'>
-                <div className='form-check mb-3'>
-                  <input className='form-check-input fs-1' type={'radio'} name={'macarrao'} value={'Macarrão'} onChange={handInputchange} required></input>
-                  <label className="form-check-label fs-1">
-                    Sim
-                  </label>
-                  <br />
-                  <input className='form-check-input fs-1' type={'radio'} name={'macarrao'} value={''} onChange={handInputchange} required></input>
-                  <label className="form-check-label fs-1">
-                    Não
-                  </label>
+              <div className='etapa' id={3} hidden>
+                <div className='d-flex justify-content-center mt-5'>
+                  <div className='form-check mb-3'>
+                    <input className='form-check-input fs-1' type={'radio'} name={'macarrao'} value={'Macarrão'} onChange={handInputchange} required></input>
+                    <label className="form-check-label fs-1">
+                      Sim
+                    </label>
+                    <br />
+                    <input className='form-check-input fs-1' type={'radio'} name={'macarrao'} value={''} onChange={handInputchange} required></input>
+                    <label className="form-check-label fs-1">
+                      Não
+                    </label>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div>
-              <div className='d-flex justify-content-center mt-5'>
-                <div className='form-check mb-3'>
-                  {!cardapio ? "Loading..." : cardapio.carnes.map((e) => {
-                    return (
-                      <>
-                        <InputRotativo value={e} name={'carne'} type={'checkbox'} onClick={limitadorCarne} onChange={handInputchange} />
-                      </>
-                    )
-                  })}
+              <div className='etapa' id={4} hidden>
+                <div className='d-flex justify-content-center mt-5'>
+                  <div className='form-check mb-3'>
+                    {!cardapio ? "Loading..." : cardapio.carnes.map((e) => {
+                      return (
+                        <>
+                          <InputRotativo value={e} name={'carne'} type={'checkbox'} onClick={limitadorCarne} onChange={handInputchange} />
+                        </>
+                      )
+                    })}
+                  </div>
                 </div>
               </div>
-            </div>
-            <div>
-              <div className='d-flex justify-content-center mt-5'>
-                <div className='form-check mb-3'>
-                  {!cardapio ? "Loading..." : cardapio.complementos.map((e) => {
-                    return (
-                      <>
-                        <InputRotativo value={e} name={'complemento'} type={'checkbox'} onClick={limitadorComplemento} onChange={handInputchange} />
-                      </>
-                    )
-                  })}
+              <div className='etapa' id={5} hidden>
+                <div className='d-flex justify-content-center mt-5'>
+                  <div className='form-check mb-3'>
+                    {!cardapio ? "Loading..." : cardapio.complementos.map((e) => {
+                      return (
+                        <>
+                          <InputRotativo value={e} name={'complemento'} type={'checkbox'} onClick={limitadorComplemento} onChange={handInputchange} />
+                        </>
+                      )
+                    })}
+                  </div>
                 </div>
               </div>
-            </div>
-            
-            <div class="d-grid gap-2 d-md-block text-center mt-4">
-              <button class="btn btn-primary btn-lg m-2" type="button" id='voltar' onClick={handleEtapa}>voltar</button>
-              <button class="btn btn-primary btn-lg m-2" type="button" id='avançar' onClick={handleEtapa}>avançar</button>
-            </div>
+              <div className='etapa text-center' id={6} hidden>
+              <button type="button" class="btn btn-primary btn-lg text-center m-5 ">Adicionar marmita</button>
+              </div>
 
-
-          </div>
-          <button type="submit" class="btn btn-primary">Submit</button>
+              <div className="d-grid gap-2 d-md-block text-center mt-4">
+                <button className="btn btn-primary btn-lg m-2" type="button" id='voltar' onClick={handleEtapa}>voltar</button>
+                <button className="btn btn-primary btn-lg m-2" type="button" id='avançar' onClick={handleEtapa}>avançar</button>
+              </div>
+            </div>
           </form>
         </div>
       </main>
