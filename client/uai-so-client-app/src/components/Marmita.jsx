@@ -4,7 +4,7 @@ const marmita = (props) => {
             <div className="card m-2" style={{ width: "16rem" }}>
                 <div className="card-body">
                     <h5 className="card-title">Marmita</h5>
-                    <ul className="list-group fs-5">
+                    <ul className="list-group">
                         <li className="list-group-item">{props.arroz}</li>
                         <li className="list-group-item">{props.feijao}</li>
                         <li className="list-group-item">{props.salada}</li>

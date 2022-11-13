@@ -5,6 +5,7 @@ import voucher_codes from 'voucher-code-generator'
 import InputRotativo from '../components/InputRotativo';
 import Marmita from '../components/Marmita';
 function Root() {
+  const [idPedido, setIDPedido] = useState(null);
   let [pedidoPessoa, setPedidoPessoa] = useState([]);
   const [cardapio, setCardapio] = useState(null);
   useEffect(() => {
@@ -159,6 +160,12 @@ function Root() {
       .then(json => console.log(json))
       .catch(err => console.log(err))
     setPedidoPessoa([]);
+    setIDPedido(idPedido.toString());
+    document.getElementById('6').setAttribute('hidden', true);
+    document.getElementById('mostrarId').removeAttribute('hidden');
+    await setTimeout(20000);
+    console.log("Waited 5s");
+
   }
   function UmaMarmita(props) {
     return <Marmita
@@ -191,6 +198,7 @@ function Root() {
         <div className='container-fluid'>
           <form method="POST" id='form-marmita'>
             <h2 className='text-center display-1' id='nome-etapa'>Escolha seu arroz</h2>
+
             <div className="progress">
               <div className="progress-bar bg-success" role="progressbar" style={{ width: "0%" }} aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" id='barra-progresso'></div>
             </div>
@@ -286,26 +294,42 @@ function Root() {
                 </div>
               </div>
               <div className='etapa text-center' id={6} hidden>
-                <button type="button" className="btn btn-primary btn-lg text-center m-5" onClick={onAdicionarMarmita}>Adicionar marmita</button>
-                  <div className='row'>
-                    <div className='col-lg-6'>
-                      <h4 className='text-center'>Pedido Atual</h4>
-                      <div className='d-flex justify-content-center'>
+                <button type="button" className="btn btn-primary btn-lg text-center m-3" onClick={onAdicionarMarmita}>Adicionar marmita</button>
+                <span data-bs-toggle="modal" data-bs-target="#exampleModal" className='fs-3'>
+                  🛒
+                  <span class="badge text-bg-secondary">{pedidoPessoa.length}</span>
+
+                </span>
+                <div>
+                  <div>
+                    <h5 className='text-center'>Pedido Atual</h5>
+                    <div className='d-flex justify-content-center'>
                       <UmaMarmita />
-                      </div>
                     </div>
-                    <div className='col-lg-6'>
-                      <h4 className='text-center'>seu carrinho: 🛒</h4>
-                      <div className='d-flex justify-content-center'>
-                      <MultiplasMarmitas />
+                  </div>
+                  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-xl">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h1 class="modal-title fs-5" id="exampleModalLabel">Seu Carrinho</h1>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body row d-flex justify-content-center">
+                          <MultiplasMarmitas />
+                        </div>
                       </div>
                     </div>
                   </div>
+
                 </div>
-              <div className="d-grid gap-2 d-md-block text-center mt-4">
-                <button className="btn btn-primary btn-lg m-2" type="button" id='voltar' onClick={handleEtapa}>voltar</button>
-                <button className="btn btn-primary btn-lg m-2" type="button" id='avançar' onClick={handleEtapa}>avançar</button>
-                <button className="btn btn-primary btn-lg m-2" type="submit" id='finalizar' hidden onClick={onFinalizar}>finalizar</button>
+              </div>
+              <div id='mostrarId' hidden>
+                <h1 className='display-1 text-center m-5'>Anote seu pedido: {idPedido}</h1>
+              </div>
+              <div className="d-grid gap-2 d-md-block text-center mt-1">
+                <button className="btn btn-primary btn-lg m-1" type="button" id='voltar' onClick={handleEtapa}>voltar</button>
+                <button className="btn btn-primary btn-lg m-1" type="button" id='avançar' onClick={handleEtapa}>avançar</button>
+                <button className="btn btn-primary btn-lg m-1" type="submit" id='finalizar' hidden onClick={onFinalizar}>finalizar</button>
               </div>
             </div>
           </form>
