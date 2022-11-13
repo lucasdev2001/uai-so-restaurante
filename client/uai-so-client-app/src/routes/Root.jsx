@@ -1,19 +1,21 @@
 import { useEffect } from 'react';
+import { useRef } from 'react';
 import { useState } from 'react';
 import voucher_codes from 'voucher-code-generator'
 import InputRotativo from '../components/InputRotativo';
+import Marmita from '../components/Marmita';
 function Root() {
-
+  let [pedidoPessoa, setPedidoPessoa] = useState([]);
   const [cardapio, setCardapio] = useState(null);
   useEffect(() => {
     fetch("/api/cardapio")
       .then((res) => res.json())
       .then((data) => setCardapio(data));
   }, []);
-
-  let [etapa,setEtapa] = useState(0);
-
-  const nomesEtapas =[
+  const refEtapa = useRef({
+    etapa: 0
+  });
+  const nomesEtapas = [
     "Escolha seu arroz",
     "Escolha seu feijão",
     "Aceita macarrão ?",
@@ -22,8 +24,7 @@ function Root() {
     "Escolha até dois complementos",
     "Seu pedido",
   ];
-
-  const [marmita, setMarmita] = useState({
+  let [marmita, setMarmita] = useState({
     arrozEscolhido: "",
     feijaoEscolhido: "",
     salada: "",
@@ -31,129 +32,124 @@ function Root() {
     carne: Array,
     complemento: Array,
   });
-
-  const [pedidoPessoa, setPedidoPessoa] = useState([]);
-
-  const handleEtapa = (e) => {
-    let id = e.target.id
+  function slider(etapa) {
     let etapas = document.querySelectorAll('.etapa');
     const nomeEtapa = document.querySelector('#nome-etapa');
+    etapas.forEach((e) => {
+      e.setAttribute('hidden', true);
+    })
+    etapas[etapa].removeAttribute('hidden')
+    document.getElementById('voltar').removeAttribute('disabled')
+    nomeEtapa.innerHTML = nomesEtapas[etapa];
+  }
+  const handleEtapa = (e) => {
+    let id = e.target.id
     const barraProgresso = document.querySelector('#barra-progresso');
-
-    function slider(etapa) {
-          etapas.forEach((e)=>{
-            e.setAttribute('hidden',true);
-          })
-          etapas[etapa].removeAttribute('hidden')
-          document.getElementById('voltar').removeAttribute('disabled')
-          nomeEtapa.innerHTML = nomesEtapas[etapa];
-    }
-
     switch (id) {
       case 'avançar':
-        if (etapa < nomesEtapas.length - 1) {
-          etapa++;
-          barraProgresso.style.width = `${(100/nomesEtapas.length + 3) * etapa}%`;
-          slider(etapa);
-          console.log(etapa);
-          
+        if (refEtapa.current.etapa === nomesEtapas.length - 2) {
+          document.getElementById('finalizar').removeAttribute('hidden');
+          document.getElementById('avançar').setAttribute('hidden', true);
+          montarMarmita();
         }
-
+        if (refEtapa.current.etapa < nomesEtapas.length - 1) {
+          let inputsDivAtual = document.getElementById(`${refEtapa.current.etapa}`);
+          if (inputsDivAtual.querySelectorAll('input:checked').length === 0) {
+            window.alert('Você deve escolher ao menos um')
+          } else {
+            refEtapa.current.etapa += 1;
+            barraProgresso.style.width = `${(100 / nomesEtapas.length + 3) * refEtapa.current.etapa}%`;
+            slider(refEtapa.current.etapa);
+            console.log(refEtapa.current.etapa);
+          }
+        }
         break;
       case 'voltar':
-        if (etapa > 0) {
-          etapa--;
-          barraProgresso.style.width = `${(100/nomesEtapas.length + 3) * etapa}%`;
-          slider(etapa);
+        if (refEtapa.current.etapa > 0) {
+          refEtapa.current.etapa -= 1;
+          barraProgresso.style.width = `${(100 / nomesEtapas.length + 3) * refEtapa.current.etapa}%`;
+          slider(refEtapa.current.etapa);
         }
-        if (etapa === 0) {
-          document.getElementById('voltar').setAttribute('disabled',true);
+        if (refEtapa.current.etapa === 0) {
+          document.getElementById('voltar').setAttribute('disabled', true);
+        }
+        if (refEtapa.current.etapa <= nomesEtapas.length - 2) {
+          document.getElementById('avançar').removeAttribute('hidden');
+          document.getElementById('finalizar').setAttribute('hidden', true);
         }
         break;
-
       default: console.log('error');
         break;
     }
   }
-
-  const desativarBotao = ()=>{
-    if (etapa === 0) {
-      document.getElementById('voltar').setAttribute('disabled',true);
-    }
-  }
-
   const handInputchange = (event) => {
     const target = event.target;
     const value = target.value;
     const name = target.name;
-
     setMarmita({
       ...marmita,
       [name]: value
     });
     console.log(marmita);
   }
-
   const limitadorCarne = (event) => {
     let inputCarnes = document.querySelectorAll('input[name="carne"]:checked');
     if (inputCarnes.length >= 3) {
       event.target.checked = false;
     } // limita o número de checkbox selecionadas
-
   }
   const limitadorComplemento = (event) => {
     let inputCarnes = document.querySelectorAll('input[name="complemento"]:checked');
     if (inputCarnes.length >= 3) {
       event.target.checked = false;
     } // limita o número de checkbox selecionadas
-
   }
-
-  const onSubmit = (event) => {
-    event.preventDefault();
-    if (window.confirm("Tem certeza que deseja adicionar ao carrinho ?") === true) {
-      let arrCarnes = [];
-      let arrComplementos = [];
-      let inputCarnes = document.querySelectorAll('input[name="carne"]:checked');
-      let inputComplementos = document.querySelectorAll('input[name="complemento"]:checked');
-
-      inputCarnes.forEach(element => {
-        arrCarnes.push(element.value);
-      });
-
-      inputComplementos.forEach(element => {
-        arrComplementos.push(element.value);
-      });
-
-      marmita.carne = arrCarnes;
-      marmita.complemento = arrComplementos;
-
-      setPedidoPessoa([...pedidoPessoa, marmita]);
-      document.getElementById('form-marmita').reset();
-
-
-    } else {
-      document.getElementById('form-marmita').reset();
-    }
-
+  const montarMarmita = () => {
+    let arrCarnes = [];
+    let arrComplementos = [];
+    let inputCarnes = document.querySelectorAll('input[name="carne"]:checked');
+    let inputComplementos = document.querySelectorAll('input[name="complemento"]:checked');
+    inputCarnes.forEach(element => {
+      arrCarnes.push(element.value);
+    });
+    inputComplementos.forEach(element => {
+      arrComplementos.push(element.value);
+    });
+    setMarmita({
+      ...marmita,
+      carne: marmita.carne = arrCarnes,
+      complemento: marmita.complemento = arrComplementos
+    })
     console.log(marmita);
+  }
+  const onAdicionarMarmita = () => {
+    console.log(pedidoPessoa.length);
+    const barraProgresso = document.querySelector('#barra-progresso');
+    barraProgresso.style.width = `0%`;
+    document.getElementById('avançar').removeAttribute('hidden');
+    document.getElementById('finalizar').setAttribute('hidden', true);
+    document.getElementById('form-marmita').reset();
+    refEtapa.current.etapa = 0;
+    slider(0);
+    setPedidoPessoa(current => [...current, marmita]);
 
   }
-
-  const enviarForm = async (event) => {
-    event.preventDefault();
+  const onFinalizar = async (event) => {
+    event.preventDefault()
+    console.log(marmita);
+    pedidoPessoa.push(marmita);
+    setPedidoPessoa(current => [...current, marmita]);
+    console.log(pedidoPessoa);
     let idPedido = voucher_codes.generate({
       length: 3,
       count: 1,
       charset: "0123456789abc"
     });
-
     let pedidoParaServer = {
       _id: idPedido.toString(),
       liberadoParaCozinha: false,
       marmitas: pedidoPessoa
     }
-
     fetch('/api/pedidos', {
       method: "POST",
       body: JSON.stringify(pedidoParaServer),
@@ -162,23 +158,43 @@ function Root() {
       .then(response => response.json())
       .then(json => console.log(json))
       .catch(err => console.log(err))
-    window.alert(`Anote o código do seu pedido: ${idPedido}`)
-
     setPedidoPessoa([]);
-
+  }
+  function UmaMarmita(props) {
+    return <Marmita
+      arroz={marmita.arrozEscolhido}
+      feijao={marmita.feijaoEscolhido}
+      salada={marmita.salada}
+      macarrao={marmita.macarrao}
+      carne={marmita.carne.toString()}
+      complemento={marmita.complemento.toString()}
+    />
+  }
+  function MultiplasMarmitas(props) {
+    return (
+      pedidoPessoa.map((e) => {
+        return <Marmita
+          arroz={e.arrozEscolhido}
+          feijao={e.feijaoEscolhido}
+          salada={e.salada}
+          macarrao={e.macarrao}
+          carne={e.carne.toString()}
+          complemento={e.complemento.toString()}
+        />
+      })
+    )
   }
 
   return (
     <div className="App">
       <main>
         <div className='container-fluid'>
-          <form method="POST" onSubmit={onSubmit} id='form-marmita'>
+          <form method="POST" id='form-marmita'>
             <h2 className='text-center display-1' id='nome-etapa'>Escolha seu arroz</h2>
             <div className="progress">
               <div className="progress-bar bg-success" role="progressbar" style={{ width: "0%" }} aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" id='barra-progresso'></div>
             </div>
             <div>
-
               <div className='etapa' id={0}>
                 <div className='d-flex justify-content-center mt-5'>
                   <div className='form-check mb-3'>
@@ -231,12 +247,12 @@ function Root() {
               <div className='etapa' id={3} hidden>
                 <div className='d-flex justify-content-center mt-5'>
                   <div className='form-check mb-3'>
-                    <input className='form-check-input fs-1' type={'radio'} name={'macarrao'} value={'Macarrão'} onChange={handInputchange} required></input>
+                    <input className='form-check-input fs-1' type={'radio'} name={'salada'} value={'salada'} onChange={handInputchange} required></input>
                     <label className="form-check-label fs-1">
                       Sim
                     </label>
                     <br />
-                    <input className='form-check-input fs-1' type={'radio'} name={'macarrao'} value={''} onChange={handInputchange} required></input>
+                    <input className='form-check-input fs-1' type={'radio'} name={'salada'} value={''} onChange={handInputchange} required></input>
                     <label className="form-check-label fs-1">
                       Não
                     </label>
@@ -270,12 +286,26 @@ function Root() {
                 </div>
               </div>
               <div className='etapa text-center' id={6} hidden>
-              <button type="button" class="btn btn-primary btn-lg text-center m-5 ">Adicionar marmita</button>
-              </div>
-
+                <button type="button" className="btn btn-primary btn-lg text-center m-5" onClick={onAdicionarMarmita}>Adicionar marmita</button>
+                  <div className='row'>
+                    <div className='col-lg-6'>
+                      <h4 className='text-center'>Pedido Atual</h4>
+                      <div className='d-flex justify-content-center'>
+                      <UmaMarmita />
+                      </div>
+                    </div>
+                    <div className='col-lg-6'>
+                      <h4 className='text-center'>seu carrinho: 🛒</h4>
+                      <div className='d-flex justify-content-center'>
+                      <MultiplasMarmitas />
+                      </div>
+                    </div>
+                  </div>
+                </div>
               <div className="d-grid gap-2 d-md-block text-center mt-4">
                 <button className="btn btn-primary btn-lg m-2" type="button" id='voltar' onClick={handleEtapa}>voltar</button>
                 <button className="btn btn-primary btn-lg m-2" type="button" id='avançar' onClick={handleEtapa}>avançar</button>
+                <button className="btn btn-primary btn-lg m-2" type="submit" id='finalizar' hidden onClick={onFinalizar}>finalizar</button>
               </div>
             </div>
           </form>
@@ -284,5 +314,4 @@ function Root() {
     </div>
   );
 }
-
 export default Root;

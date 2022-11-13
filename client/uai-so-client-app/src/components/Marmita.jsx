@@ -1,10 +1,10 @@
 const marmita = (props) => {
     return (
         <>
-            <div className="card m-3" style={{ width: "14rem" }}>
+            <div className="card m-2" style={{ width: "16rem" }}>
                 <div className="card-body">
                     <h5 className="card-title">Marmita</h5>
-                    <ul className="list-group">
+                    <ul className="list-group fs-5">
                         <li className="list-group-item">{props.arroz}</li>
                         <li className="list-group-item">{props.feijao}</li>
                         <li className="list-group-item">{props.salada}</li>
