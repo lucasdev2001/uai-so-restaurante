@@ -10,8 +10,6 @@ const Adm = () => {
 
       }, []);
 
-      console.log(cardapio);
-
     const [item, setItem] = useState({
         arroz: String,
         feijão: String,
@@ -52,11 +50,39 @@ const Adm = () => {
             [name]: [...arrTemp, item]
         })
 
-        console.log(item);
-        console.log(cardapio);
-
     }
 
+    const deletarItem = (e)=>{
+        const name = e.target.name;
+        const itemParaDeletar = e.target.value;
+        let arrTemp = [];
+        switch (name) {
+            case 'arroz':
+                arrTemp = cardapio.arroz.filter(valor=>valor!== itemParaDeletar);
+                console.log(arrTemp);
+                break;
+            case 'feijão':
+                arrTemp = cardapio.feijão.filter(valor=>valor!== itemParaDeletar);
+                console.log(arrTemp);
+                break;
+            case 'carnes':
+                arrTemp = cardapio.carnes.filter(valor=>valor!== itemParaDeletar);
+                console.log(arrTemp);
+                break;
+            case 'complementos':
+                arrTemp = cardapio.complementos.filter(valor=>valor!== itemParaDeletar);
+                console.log(arrTemp);
+                break;
+
+            default:
+                break;
+        }
+        console.log(name);
+        setCardapio({
+            ...cardapio,
+            [name]:arrTemp
+        })
+    }
 
     const editarCardapio = (e) => {
         fetch('/api/cardapio/', {
@@ -64,9 +90,15 @@ const Adm = () => {
             body: JSON.stringify(cardapio),
             headers: { "Content-type": "application/json; charset=UTF-8" }
         })
-            .then(response => response.json())
+            .then((response)=>{
+                response.json()
+                if(response.ok){
+                    window.alert("Cardapio Modificado com Sucesso")
+                }
+            })
             .then(json => console.log(json))
             .catch(err => console.log(err))
+            
     }
 
     return (
@@ -88,7 +120,7 @@ const Adm = () => {
                                             <p>{e}</p>
                                         </div>
                                         <div className="col">
-                                            <button className="btn btn-danger btn-sm m-1">remover</button>
+                                            <button className="btn btn-danger btn-sm m-1" value={e} onClick={deletarItem} name="arroz">remover</button>
                                         </div>
                                     </div>
                                 </>
@@ -107,7 +139,7 @@ const Adm = () => {
                                             <p>{e}</p>
                                         </div>
                                         <div className="col">
-                                            <button className="btn btn-danger btn-sm m-1">remover</button>
+                                            <button className="btn btn-danger btn-sm m-1" value={e} onClick={deletarItem} name="feijão">remover</button>
                                         </div>
                                     </div>
                                 </>
@@ -126,7 +158,7 @@ const Adm = () => {
                                             <p>{e}</p>
                                         </div>
                                         <div className="col">
-                                            <button className="btn btn-danger btn-sm m-1">remover</button>
+                                            <button className="btn btn-danger btn-sm m-1" value={e} onClick={deletarItem} name="carnes">remover</button>
                                         </div>
                                     </div>
                                 </>
@@ -145,7 +177,7 @@ const Adm = () => {
                                             <p>{e}</p>
                                         </div>
                                         <div className="col">
-                                            <button className="btn btn-danger btn-sm m-1">remover</button>
+                                            <button className="btn btn-danger btn-sm m-1" value={e} onClick={deletarItem} name="complementos">remover</button>
                                         </div>
                                     </div>
                                 </>
