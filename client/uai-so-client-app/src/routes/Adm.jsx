@@ -1,12 +1,16 @@
+import { useEffect } from "react";
 import { useState } from "react"
 
 const Adm = () => {
-    const [cardapio, setCardapio] = useState({
-        arroz: ["Branco", "Carreteiro"],
-        feijão: ["Tropeiro", "Carioca"],
-        carnes: ["Filé", "Peixe", "Carne Seca"],
-        complementos: ["Farofa", "Pudim"],
-    })
+    const [cardapio, setCardapio] = useState(Object)
+    useEffect(() => {
+        fetch("/api/cardapio")
+          .then((res) => res.json())
+          .then((data)=>setCardapio(data));
+
+      }, []);
+
+      console.log(cardapio);
 
     const [item, setItem] = useState({
         arroz: String,
@@ -76,10 +80,10 @@ const Adm = () => {
                         <h3>Arroz</h3>
                         <input type="text" className="form-control" onChange={handleInputEvent} />
                         <button className="btn btn-primary btn-sm m-2" name="arroz" onClick={adicionarItemCardapio}> Adicionar item</button>
-                        {cardapio.arroz.map((e) => {
-                            return (
+                        {!cardapio.arroz ? "Carregando Cardapio" : cardapio.arroz.map((e)=>{
+                            return(
                                 <>
-                                    <div className="row">
+                                <div className="row">
                                         <div className="col">
                                             <p>{e}</p>
                                         </div>
@@ -95,10 +99,10 @@ const Adm = () => {
                         <h3>Feijão</h3>
                         <input type="text" className="form-control" name="feijão" onChange={handleInputEvent} />
                         <button className="btn btn-primary btn-sm m-2" name="feijão" onClick={adicionarItemCardapio}> Adicionar item</button>
-                        {cardapio.feijão.map((e) => {
-                            return (
+                        {!cardapio.feijão ? "Carregando Cardapio" : cardapio.feijão.map((e)=>{
+                            return(
                                 <>
-                                    <div className="row">
+                                <div className="row">
                                         <div className="col">
                                             <p>{e}</p>
                                         </div>
@@ -114,10 +118,10 @@ const Adm = () => {
                         <h3>Carnes</h3>
                         <input type="text" className="form-control" name="carne" onChange={handleInputEvent} />
                         <button className="btn btn-primary btn-sm m-2" name="carnes" onClick={adicionarItemCardapio}> Adicionar item</button>
-                        {cardapio.carnes.map((e) => {
-                            return (
+                        {!cardapio.carnes ? "Carregando Cardapio" : cardapio.carnes.map((e)=>{
+                            return(
                                 <>
-                                    <div className="row">
+                                <div className="row">
                                         <div className="col">
                                             <p>{e}</p>
                                         </div>
@@ -133,10 +137,10 @@ const Adm = () => {
                         <h3>Complementos</h3>
                         <input type="text" className="form-control" name="complemento" onChange={handleInputEvent} />
                         <button className="btn btn-primary btn-sm m-2" name="complementos" onClick={adicionarItemCardapio}> Adicionar item</button>
-                        {cardapio.complementos.map((e) => {
-                            return (
+                        {!cardapio.complementos ? "Carregando Cardapio" : cardapio.complementos.map((e)=>{
+                            return(
                                 <>
-                                    <div className="row">
+                                <div className="row">
                                         <div className="col">
                                             <p>{e}</p>
                                         </div>

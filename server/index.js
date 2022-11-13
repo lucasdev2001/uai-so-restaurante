@@ -21,6 +21,23 @@ const Cardapio = mongoose.model('Cardapio',{
   complementos: Array,
 })
 
+const cardapioPadrao = new Cardapio({
+  _id:"Cardapio-Padrão",
+  arroz:["Arroz branco","Arroz carreteiro"],
+  feijão:["Feijão Preto","Feijão Carioca"],
+  carnes:["Filé","Peixe","Bife"],
+  complementos:["Farofa","Maionese","Gratinado"]
+ });
+
+ Cardapio.countDocuments({_id: "Cardapio-Padrão"}, function (err, count){ 
+  if(count>0){
+      console.log('cardapio padrão já foi criado');
+  }else {
+    cardapioPadrao.save().then(()=>console.log('cardapio padrão criado'));
+  }
+}); 
+
+
 
 app.post('/api/pedidos', jsonParser, (req, res) => {
   let resposta = req.body;
@@ -68,7 +85,7 @@ app.get('/api/cardapio', async(req,res)=>{
 app.put('/api/cardapio',jsonParser, async (req,res)=>{
   try {
     console.log(req.body);
-    const cardapioPorId = await Cardapio.findOneAndUpdate({ _id: 'Segunda-Feira' },req.body).exec();
+    const cardapioPorId = await Cardapio.findOneAndUpdate({ _id: "Cardapio-Padrão" },req.body).exec();
     res.send(cardapioPorId)
   } catch (error) {
     console.log(error);
