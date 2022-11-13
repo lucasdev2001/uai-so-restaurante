@@ -4,7 +4,6 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 import {createBrowserRouter,RouterProvider} from "react-router-dom";
 import Cozinha from './routes/Cozinha';
-import Cardapio from './routes/Cardapio';
 import Pedido from './routes/Pedidos';
 import Root from './routes/Root';
 import Adm from './routes/Adm';
@@ -21,10 +20,6 @@ const router = createBrowserRouter([
   {
     path: "/cozinha",
     element: <Cozinha />,
-  },
-  {
-    path: "/cardapio",
-    element: <Cardapio />,
   },
   {
     path: "/adm",
