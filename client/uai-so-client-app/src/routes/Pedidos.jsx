@@ -59,6 +59,7 @@ const Pedidos = () => {
                                             macarrao={e.macarrao}
                                             carne={e.carne.toString()}
                                             complemento={e.complemento.toString()}
+                                            quantidade={e.quantidade}
                                         />
                                         <br />
                                     </>

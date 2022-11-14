@@ -24,13 +24,9 @@ const Cozinha = () => {
         }
     }
 
-    function btnChrome_onclick() {
-        document.documentElement.webkitRequestFullScreen();
-      }
-
     return (
         <>
-            <main onClick={btnChrome_onclick}>
+            <main>
                 <div className="container-fluid">
                     <h1 className="text-center">Cozinha</h1>
                     <div className="row">
@@ -53,6 +49,7 @@ const Cozinha = () => {
                                                 complemento={e.complemento.toString()}
                                             />
                                             <br />
+                                            <hr/>
                                         </>
                                     })}
                                 </div>
@@ -60,7 +57,6 @@ const Cozinha = () => {
                         })}
                     </div>
                 </div>
-                <button onClick={btnChrome_onclick}> clikca</button>
             </main>
         </>
     )

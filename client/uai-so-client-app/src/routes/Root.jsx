@@ -23,6 +23,7 @@ function Root() {
     "Aceita Salada ?",
     "Escolha até duas carnes",
     "Escolha até dois complementos",
+    "Quantidade",
     "Seu pedido",
   ];
   let [marmita, setMarmita] = useState({
@@ -30,8 +31,9 @@ function Root() {
     feijaoEscolhido: "",
     salada: "",
     macarrao: "",
-    carne: Array,
-    complemento: Array,
+    carne: Array || "",
+    complemento: Array || "",
+    quantidade: "1"
   });
   function slider(etapa) {
     let etapas = document.querySelectorAll('.etapa');
@@ -55,7 +57,7 @@ function Root() {
         }
         if (refEtapa.current.etapa < nomesEtapas.length - 1) {
           let inputsDivAtual = document.getElementById(`${refEtapa.current.etapa}`);
-          if (inputsDivAtual.querySelectorAll('input:checked').length === 0) {
+          if (1 === 0) {
             window.alert('Você deve escolher ao menos um')
           } else {
             refEtapa.current.etapa += 1;
@@ -137,6 +139,7 @@ function Root() {
   }
   const onFinalizar = async (event) => {
     event.preventDefault()
+    document.querySelectorAll('.etapa').forEach((e)=>e.setAttribute('hidden',true));
     console.log(marmita);
     pedidoPessoa.push(marmita);
     setPedidoPessoa(current => [...current, marmita]);
@@ -175,6 +178,7 @@ function Root() {
       macarrao={marmita.macarrao}
       carne={marmita.carne.toString()}
       complemento={marmita.complemento.toString()}
+      quantidade={marmita.quantidade}
     />
   }
   function MultiplasMarmitas(props) {
@@ -187,6 +191,7 @@ function Root() {
           macarrao={e.macarrao}
           carne={e.carne.toString()}
           complemento={e.complemento.toString()}
+          quantidade={e.quantidade}
         />
       })
     )
@@ -293,11 +298,19 @@ function Root() {
                   </div>
                 </div>
               </div>
-              <div className='etapa text-center' id={6} hidden>
+              <div className='etapa' id={6} hidden>
+                <div className='d-flex justify-content-center mt-5 fs-1'>
+                  <div className='text-center'>
+                  <label class="form-label">{marmita.quantidade}</label>
+                  <input type="range" className="form-range" min="1" max="5" onChange={handInputchange} value={marmita.quantidade} name="quantidade"></input>
+                  </div>
+                </div>
+              </div>
+              <div className='etapa text-center' id={7} hidden>
                 <button type="button" className="btn btn-primary btn-lg text-center m-3" onClick={onAdicionarMarmita}>Adicionar marmita</button>
                 <span data-bs-toggle="modal" data-bs-target="#exampleModal" className='fs-3'>
                   🛒
-                  <span class="badge text-bg-secondary">{pedidoPessoa.length}</span>
+                  <span className="badge text-bg-secondary">{pedidoPessoa.length}</span>
 
                 </span>
                 <div>
@@ -307,14 +320,14 @@ function Root() {
                       <UmaMarmita />
                     </div>
                   </div>
-                  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-xl">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h1 class="modal-title fs-5" id="exampleModalLabel">Seu Carrinho</h1>
-                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  <div className="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog modal-xl">
+                      <div className="modal-content">
+                        <div className="modal-header">
+                          <h1 className="modal-title fs-5" id="exampleModalLabel">Seu Carrinho</h1>
+                          <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="modal-body row d-flex justify-content-center">
+                        <div className="modal-body row d-flex justify-content-center">
                           <MultiplasMarmitas />
                         </div>
                       </div>
