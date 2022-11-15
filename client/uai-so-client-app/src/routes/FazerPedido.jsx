@@ -302,7 +302,7 @@ function FazerPedido() {
                 <div className='d-flex justify-content-center mt-5 fs-1'>
                   <div className='text-center'>
                   <label class="form-label">{marmita.quantidade}</label>
-                  <input type="range" className="form-range" min="1" max="5" onChange={handInputchange} value={marmita.quantidade} name="quantidade"></input>
+                  <input type="range" className="form-range" min="1" max="10" onChange={handInputchange} value={marmita.quantidade} name="quantidade"></input>
                   </div>
                 </div>
               </div>
