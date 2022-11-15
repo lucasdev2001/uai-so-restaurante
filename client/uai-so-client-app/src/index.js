@@ -5,13 +5,14 @@ import reportWebVitals from './reportWebVitals';
 import {createBrowserRouter,RouterProvider} from "react-router-dom";
 import Cozinha from './routes/Cozinha';
 import Pedido from './routes/Pedidos';
-import Root from './routes/Root';
+import FazerPedido from './routes/FazerPedido';
 import Adm from './routes/Adm';
+import Inicial from './routes/Inicial';
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Root />,
+    element: <Inicial />,
   },
   {
     path: "/pedidos",
@@ -25,6 +26,14 @@ const router = createBrowserRouter([
     path: "/adm",
     element: <Adm />,
   },
+  {
+    path:"/inicial",
+    element: <Inicial />
+  },
+  {
+    path:'/fazerpedido',
+    element:<FazerPedido />
+  }
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

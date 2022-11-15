@@ -4,7 +4,7 @@ import { useState } from 'react';
 import voucher_codes from 'voucher-code-generator'
 import InputRotativo from '../components/InputRotativo';
 import Marmita from '../components/Marmita';
-function Root() {
+function FazerPedido() {
   const [idPedido, setIDPedido] = useState(null);
   let [pedidoPessoa, setPedidoPessoa] = useState([]);
   const [cardapio, setCardapio] = useState(null);
@@ -351,4 +351,4 @@ function Root() {
     </div>
   );
 }
-export default Root;
+export default FazerPedido;
