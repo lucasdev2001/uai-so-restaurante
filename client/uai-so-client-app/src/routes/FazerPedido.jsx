@@ -12,7 +12,7 @@ function FazerPedido() {
   const [pedidoPessoa, setPedidoPessoa] = useState([]);
   const [cardapio, setCardapio] = useState(null);
   useEffect(() => {
-    fetch("/api/cardapio")
+    fetch("http://localhost:3001/api/cardapio")
       .then((res) => res.json())
       .then((data) => setCardapio(data));
   }, []);
@@ -167,7 +167,7 @@ function FazerPedido() {
       marmitas: pedidoPessoa,
       quantidadeTotal: total
     }
-    fetch('/api/pedidos', {
+    fetch('http://localhost:3001/api/pedidos', {
       method: "POST",
       body: JSON.stringify(pedidoParaServer),
       headers: { "Content-type": "application/json; charset=UTF-8" }

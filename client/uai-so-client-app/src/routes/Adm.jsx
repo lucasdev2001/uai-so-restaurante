@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 const Adm = () => {
     const [cardapio, setCardapio] = useState(Object)
     useEffect(() => {
-        fetch("/api/cardapio")
+        fetch("http://localhost:3001/api/cardapio")
             .then((res) => res.json())
             .then((data) => setCardapio(data));
 
@@ -86,7 +86,7 @@ const Adm = () => {
     }
 
     const editarCardapio = (e) => {
-        fetch('/api/cardapio/', {
+        fetch('http://localhost:3001/api/cardapio/', {
             method: "PUT",
             body: JSON.stringify(cardapio),
             headers: { "Content-type": "application/json; charset=UTF-8" }

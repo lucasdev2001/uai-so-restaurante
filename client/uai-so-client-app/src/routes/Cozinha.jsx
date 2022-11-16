@@ -5,14 +5,14 @@ const Cozinha = () => {
     const [pedidos, setPedidos] = useState([]);
     useEffect(() => {
         const interval = setInterval(async () => {
-            let pedidosServer = await (await fetch('/api/pedidosliberados')).json();
+            let pedidosServer = await (await fetch('http://localhost:3001/api/pedidosliberados')).json();
             setPedidos(pedidosServer);
         }, 1000);
         return () => clearInterval(interval);
     }, []);
     const deletarPedido = (e) => {
         if (window.confirm("Tem certeza que deseja finalizar o pedido ?") === true) {
-            fetch('/api/pedidos', {
+            fetch('http://localhost:3001/api/pedidos', {
                 method: "DELETE",
                 body: JSON.stringify({
                     _id: e.target.id

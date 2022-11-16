@@ -1,13 +1,15 @@
 const express = require('express');
+const path = require('path');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost:27017/restaurante-uai-sô-database-dev');
 const app = express();
 const port = 3001;
 
+
 const jsonParser = bodyParser.json();
 
-
+app.use(express.static(path.join(__dirname, "../client/uai-so-client-app", "build")));
 
 const Pedido = mongoose.model('Pedido', {
   _id: String,
@@ -129,5 +131,16 @@ app.put('/api/cardapio',jsonParser, async (req,res)=>{
     console.log(error);
   }
 })
+
+if (process.env.NODE_ENV === 'production') {
+  // Serve any static files
+  app.use(express.static(path.join(__dirname, '../client/uai-so-client-app/build')));
+    
+  // Handle React routing, return all requests to React app
+  app.get('*', function(req, res) {
+    res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+  });
+}
+
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));

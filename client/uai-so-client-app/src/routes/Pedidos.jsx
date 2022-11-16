@@ -5,7 +5,7 @@ const Pedidos = () => {
     const [pedidos, setPedidos] = useState([]);
     useEffect(() => {
         const interval = setInterval(async () => {
-            let pedidosServer = await (await fetch('/api/pedidos')).json();
+            let pedidosServer = await (await fetch('http://localhost:3001/api/pedidos')).json();
             setPedidos(pedidosServer);
         }, 1000);
         return () => clearInterval(interval);
@@ -13,7 +13,7 @@ const Pedidos = () => {
     }, []);
     const deletarPedido = (e) => {
         if (window.confirm("Tem certeza que deseja deletar ?") === true) {
-            fetch('/api/pedidos', {
+            fetch('http://localhost:3001/api/pedidos', {
                 method: "DELETE",
                 body: JSON.stringify({
                     _id: e.target.id
@@ -25,7 +25,7 @@ const Pedidos = () => {
         }
     }
     const liberarPedido = (e) => {
-        fetch('/api/pedidos/liberar', {
+        fetch('http://localhost:3001/api/pedidos/liberar', {
             method: "PUT",
             body: JSON.stringify({
                 _id: e.target.id.toString()
