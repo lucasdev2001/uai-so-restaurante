@@ -1,12 +1,15 @@
 import { useEffect } from 'react';
 import { useRef } from 'react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import voucher_codes from 'voucher-code-generator'
 import InputRotativo from '../components/InputRotativo';
 import Marmita from '../components/Marmita';
+
 function FazerPedido() {
+  const navigate = useNavigate();
   const [idPedido, setIDPedido] = useState(null);
-  let [pedidoPessoa, setPedidoPessoa] = useState([]);
+  const [pedidoPessoa, setPedidoPessoa] = useState([]);
   const [cardapio, setCardapio] = useState(null);
   useEffect(() => {
     fetch("/api/cardapio")
@@ -27,12 +30,12 @@ function FazerPedido() {
     "Seu pedido",
   ];
   let [marmita, setMarmita] = useState({
-    arrozEscolhido: "",
-    feijaoEscolhido: "",
+    arrozEscolhido: "Sem Arroz",
+    feijaoEscolhido: "Sem Feijão",
     salada: "",
     macarrao: "",
-    carne: Array || "",
-    complemento: Array || "",
+    carne: Array || "Sem Carnes",
+    complemento: Array || "Sem complementos",
     quantidade: "1"
   });
   function slider(etapa) {
@@ -139,7 +142,7 @@ function FazerPedido() {
   }
   const onFinalizar = async (event) => {
     event.preventDefault()
-    document.querySelectorAll('.etapa').forEach((e)=>e.setAttribute('hidden',true));
+    document.querySelectorAll('.etapa').forEach((e) => e.setAttribute('hidden', true));
     console.log(marmita);
     pedidoPessoa.push(marmita);
     setPedidoPessoa(current => [...current, marmita]);
@@ -149,10 +152,20 @@ function FazerPedido() {
       count: 1,
       charset: "0123456789abc"
     });
+
+    let total = 0
+
+    pedidoPessoa.map((e) => {
+      total = total + parseFloat(e.quantidade)
+    })
+
+    console.log('o total é' + total);
+
     let pedidoParaServer = {
       _id: idPedido.toString(),
       liberadoParaCozinha: false,
-      marmitas: pedidoPessoa
+      marmitas: pedidoPessoa,
+      quantidadeTotal: total
     }
     fetch('/api/pedidos', {
       method: "POST",
@@ -164,11 +177,15 @@ function FazerPedido() {
       .catch(err => console.log(err))
     setPedidoPessoa([]);
     setIDPedido(idPedido.toString());
-    document.getElementById('6').setAttribute('hidden', true);
+    document.getElementById('6').setAttribute('hidden', true); // alterar ao adicionar uma nova etapa.
     document.getElementById('mostrarId').removeAttribute('hidden');
-    await setTimeout(20000);
-    console.log("Waited 5s");
-
+    document.getElementById('avançar').setAttribute('hidden', true);
+    document.getElementById('voltar').setAttribute('hidden',true);
+    document.getElementById('finalizar').setAttribute('hidden',true);
+    document.getElementById('novo').removeAttribute('hidden');
+    await setTimeout(function(){
+      navigate('/');
+  }, 60000);
   }
   function UmaMarmita(props) {
     return <Marmita
@@ -195,6 +212,11 @@ function FazerPedido() {
         />
       })
     )
+  }
+
+  const onNovoPedido = (e)=>{
+    e.preventDefault();
+    window.location.reload();
   }
 
   return (
@@ -301,8 +323,8 @@ function FazerPedido() {
               <div className='etapa' id={6} hidden>
                 <div className='d-flex justify-content-center mt-5 fs-1'>
                   <div className='text-center'>
-                  <label class="form-label">{marmita.quantidade}</label>
-                  <input type="range" className="form-range" min="1" max="10" onChange={handInputchange} value={marmita.quantidade} name="quantidade"></input>
+                    <label class="form-label">{marmita.quantidade}</label>
+                    <input type="range" className="form-range" min="1" max="10" onChange={handInputchange} value={marmita.quantidade} name="quantidade"></input>
                   </div>
                 </div>
               </div>
@@ -343,6 +365,7 @@ function FazerPedido() {
                 <button className="btn btn-primary btn-lg m-1" type="button" id='voltar' onClick={handleEtapa}>voltar</button>
                 <button className="btn btn-primary btn-lg m-1" type="button" id='avançar' onClick={handleEtapa}>avançar</button>
                 <button className="btn btn-primary btn-lg m-1" type="submit" id='finalizar' hidden onClick={onFinalizar}>finalizar</button>
+                <button className="btn btn-primary btn-lg m-1" type="submit" id='novo' hidden onClick={onNovoPedido}>Novo pedido</button>
               </div>
             </div>
           </form>

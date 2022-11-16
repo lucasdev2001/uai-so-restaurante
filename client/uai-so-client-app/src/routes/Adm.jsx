@@ -1,14 +1,15 @@
 import { useEffect } from "react";
 import { useState } from "react"
+import { Link } from "react-router-dom";
 
 const Adm = () => {
     const [cardapio, setCardapio] = useState(Object)
     useEffect(() => {
         fetch("/api/cardapio")
-          .then((res) => res.json())
-          .then((data)=>setCardapio(data));
+            .then((res) => res.json())
+            .then((data) => setCardapio(data));
 
-      }, []);
+    }, []);
 
     const [item, setItem] = useState({
         arroz: String,
@@ -52,25 +53,25 @@ const Adm = () => {
 
     }
 
-    const deletarItem = (e)=>{
+    const deletarItem = (e) => {
         const name = e.target.name;
         const itemParaDeletar = e.target.value;
         let arrTemp = [];
         switch (name) {
             case 'arroz':
-                arrTemp = cardapio.arroz.filter(valor=>valor!== itemParaDeletar);
+                arrTemp = cardapio.arroz.filter(valor => valor !== itemParaDeletar);
                 console.log(arrTemp);
                 break;
             case 'feijão':
-                arrTemp = cardapio.feijão.filter(valor=>valor!== itemParaDeletar);
+                arrTemp = cardapio.feijão.filter(valor => valor !== itemParaDeletar);
                 console.log(arrTemp);
                 break;
             case 'carnes':
-                arrTemp = cardapio.carnes.filter(valor=>valor!== itemParaDeletar);
+                arrTemp = cardapio.carnes.filter(valor => valor !== itemParaDeletar);
                 console.log(arrTemp);
                 break;
             case 'complementos':
-                arrTemp = cardapio.complementos.filter(valor=>valor!== itemParaDeletar);
+                arrTemp = cardapio.complementos.filter(valor => valor !== itemParaDeletar);
                 console.log(arrTemp);
                 break;
 
@@ -80,7 +81,7 @@ const Adm = () => {
         console.log(name);
         setCardapio({
             ...cardapio,
-            [name]:arrTemp
+            [name]: arrTemp
         })
     }
 
@@ -90,15 +91,15 @@ const Adm = () => {
             body: JSON.stringify(cardapio),
             headers: { "Content-type": "application/json; charset=UTF-8" }
         })
-            .then((response)=>{
+            .then((response) => {
                 response.json()
-                if(response.ok){
+                if (response.ok) {
                     window.alert("Cardapio Modificado com Sucesso")
                 }
             })
             .then(json => console.log(json))
             .catch(err => console.log(err))
-            
+
     }
 
     return (
@@ -112,10 +113,10 @@ const Adm = () => {
                         <h3>Arroz</h3>
                         <input type="text" className="form-control" onChange={handleInputEvent} />
                         <button className="btn btn-primary btn-sm m-2" name="arroz" onClick={adicionarItemCardapio}> Adicionar item</button>
-                        {!cardapio.arroz ? "Carregando Cardapio" : cardapio.arroz.map((e)=>{
-                            return(
+                        {!cardapio.arroz ? "Carregando Cardapio" : cardapio.arroz.map((e) => {
+                            return (
                                 <>
-                                <div className="row">
+                                    <div className="row">
                                         <div className="col">
                                             <p>{e}</p>
                                         </div>
@@ -131,10 +132,10 @@ const Adm = () => {
                         <h3>Feijão</h3>
                         <input type="text" className="form-control" name="feijão" onChange={handleInputEvent} />
                         <button className="btn btn-primary btn-sm m-2" name="feijão" onClick={adicionarItemCardapio}> Adicionar item</button>
-                        {!cardapio.feijão ? "Carregando Cardapio" : cardapio.feijão.map((e)=>{
-                            return(
+                        {!cardapio.feijão ? "Carregando Cardapio" : cardapio.feijão.map((e) => {
+                            return (
                                 <>
-                                <div className="row">
+                                    <div className="row">
                                         <div className="col">
                                             <p>{e}</p>
                                         </div>
@@ -150,10 +151,10 @@ const Adm = () => {
                         <h3>Carnes</h3>
                         <input type="text" className="form-control" name="carne" onChange={handleInputEvent} />
                         <button className="btn btn-primary btn-sm m-2" name="carnes" onClick={adicionarItemCardapio}> Adicionar item</button>
-                        {!cardapio.carnes ? "Carregando Cardapio" : cardapio.carnes.map((e)=>{
-                            return(
+                        {!cardapio.carnes ? "Carregando Cardapio" : cardapio.carnes.map((e) => {
+                            return (
                                 <>
-                                <div className="row">
+                                    <div className="row">
                                         <div className="col">
                                             <p>{e}</p>
                                         </div>
@@ -169,10 +170,10 @@ const Adm = () => {
                         <h3>Complementos</h3>
                         <input type="text" className="form-control" name="complemento" onChange={handleInputEvent} />
                         <button className="btn btn-primary btn-sm m-2" name="complementos" onClick={adicionarItemCardapio}> Adicionar item</button>
-                        {!cardapio.complementos ? "Carregando Cardapio" : cardapio.complementos.map((e)=>{
-                            return(
+                        {!cardapio.complementos ? "Carregando Cardapio" : cardapio.complementos.map((e) => {
+                            return (
                                 <>
-                                <div className="row">
+                                    <div className="row">
                                         <div className="col">
                                             <p>{e}</p>
                                         </div>
@@ -185,6 +186,12 @@ const Adm = () => {
                         })}
                     </div>
                 </div>
+            </div>
+            <div className="mb-3 text-center">
+                <h2>Autorizar Pedidos</h2>
+                <Link to={'/pedidos'}>
+                    <button class="btn btn-primary" role="button">Autorizar</button>
+                </Link>
             </div>
         </>
     )
