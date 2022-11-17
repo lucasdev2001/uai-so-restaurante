@@ -11,6 +11,7 @@ function FazerPedido() {
   const [idPedido, setIDPedido] = useState(null);
   const [pedidoPessoa, setPedidoPessoa] = useState([]);
   const [cardapio, setCardapio] = useState(null);
+  const [errorMessage,setErrorMessage] = useState();
   useEffect(() => {
     fetch("http://localhost:3001/api/cardapio")
       .then((res) => res.json())
@@ -29,13 +30,13 @@ function FazerPedido() {
     "Quantidade",
     "Seu pedido",
   ];
-  let [marmita, setMarmita] = useState({
-    arrozEscolhido: "Sem Arroz",
-    feijaoEscolhido: "Sem Feijão",
-    salada: "",
-    macarrao: "",
-    carne: Array || "Sem Carnes",
-    complemento: Array || "Sem complementos",
+  const [marmita, setMarmita] = useState({
+    arrozEscolhido: "Sem arroz",
+    feijaoEscolhido: "Sem feijão",
+    salada: "Sem salada",
+    macarrao: "Sem macarrão",
+    carne: Array || "Sem carne",
+    complemento:Array || "Sem complemento",
     quantidade: "1"
   });
   function slider(etapa) {
@@ -174,7 +175,10 @@ function FazerPedido() {
     })
       .then(response => response.json())
       .then(json => console.log(json))
-      .catch(err => console.log(err))
+      .catch(err => {
+        setErrorMessage(err.toString());
+        console.log(err);
+      })
     setPedidoPessoa([]);
     setIDPedido(idPedido.toString());
     document.getElementById('6').setAttribute('hidden', true); // alterar ao adicionar uma nova etapa.
@@ -359,7 +363,7 @@ function FazerPedido() {
                 </div>
               </div>
               <div id='mostrarId' hidden>
-                <h1 className='display-1 text-center m-5'>Anote seu pedido: {idPedido}</h1>
+                {errorMessage ? <h1 className='display-1 text-center m-5'>Ouve um erro: {errorMessage}</h1> : <h1 className='display-1 text-center m-5'>Anote seu pedido: {idPedido}</h1>}
               </div>
               <div className="d-grid gap-2 d-md-block text-center mt-1">
                 <button className="btn btn-primary btn-lg m-1" type="button" id='voltar' onClick={handleEtapa}>voltar</button>

@@ -2,9 +2,24 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/restaurante-uai-sô-database-dev');
+const cors = require('cors');
 const app = express();
 const port = 3001;
+
+mongoose.connect('mongodb://localhost:27017/restaurante-uai-sô-database-dev');
+
+
+app.use(cors({
+    origin: ['http://localhost:3000/']
+}));
+
+app.use(function(req, res, next) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  next();
+});
 
 
 const jsonParser = bodyParser.json();
