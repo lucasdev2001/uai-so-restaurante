@@ -3,21 +3,18 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const helmet = require("helmet");
 const app = express();
 const port = 3001;
 
 mongoose.connect('mongodb://localhost:27017/restaurante-uai-sô-database-dev');
+const corsOptions ={
+   origin:'*', 
+   credentials:true,            //access-control-allow-credentials:true
+   optionSuccessStatus:200,
+}
 
+app.use(cors(corsOptions)) 
 
-app.use(cors({
-  "origin": "*",
-  "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
-  "preflightContinue": false,
-  "optionsSuccessStatus": 204
-}));
-
-app.use(helmet());
 
 const jsonParser = bodyParser.json();
 
@@ -143,6 +140,8 @@ app.put('/api/cardapio',jsonParser, async (req,res)=>{
     console.log(error);
   }
 })
+
+
 
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
