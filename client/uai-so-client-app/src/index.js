@@ -1,13 +1,13 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import reportWebVitals from './reportWebVitals';
-import {createBrowserRouter,RouterProvider} from "react-router-dom";
-import Cozinha from './routes/Cozinha';
-import Pedido from './routes/Pedidos';
-import FazerPedido from './routes/FazerPedido';
-import Adm from './routes/Adm';
-import Inicial from './routes/Inicial';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import reportWebVitals from "./reportWebVitals";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Cozinha from "./routes/Cozinha";
+import Pedido from "./routes/Pedidos";
+import FazerPedido from "./routes/FazerPedido";
+import Adm from "./routes/Adm";
+import Inicial from "./routes/Inicial";
 
 const router = createBrowserRouter([
   {
@@ -16,7 +16,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/pedidos",
-    element: <Pedido/>,
+    element: <Pedido />,
   },
   {
     path: "/cozinha",
@@ -27,19 +27,19 @@ const router = createBrowserRouter([
     element: <Adm />,
   },
   {
-    path:"/inicial",
-    element: <Inicial />
+    path: "/inicial",
+    element: <Inicial />,
   },
   {
-    path:'/fazerpedido',
-    element:<FazerPedido />
-  }
+    path: "/fazerpedido",
+    element: <FazerPedido />,
+  },
 ]);
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-     <RouterProvider router={router} />
+    <RouterProvider router={router} />
   </React.StrictMode>
 );
 

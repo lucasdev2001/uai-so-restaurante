@@ -3,8 +3,8 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const app = express();
 const helmet = require("helmet");
+const app = express();
 const port = 3001;
 
 mongoose.connect('mongodb://localhost:27017/restaurante-uai-sô-database-dev');
@@ -18,7 +18,6 @@ app.use(cors({
 }));
 
 app.use(helmet());
-
 
 const jsonParser = bodyParser.json();
 
