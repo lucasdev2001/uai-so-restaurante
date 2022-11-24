@@ -11,7 +11,7 @@ function FazerPedido() {
   const [idPedido, setIDPedido] = useState(null);
   const [pedidoPessoa, setPedidoPessoa] = useState([]);
   const [cardapio, setCardapio] = useState(null);
-  const [errorMessage,setErrorMessage] = useState();
+  const [errorMessage, setErrorMessage] = useState();
   useEffect(() => {
     fetch("http://localhost:3001/api/cardapio")
       .then((res) => res.json())
@@ -36,7 +36,7 @@ function FazerPedido() {
     salada: "Sem salada",
     macarrao: "Sem macarrão",
     carne: Array || "Sem carne",
-    complemento:Array || "Sem complemento",
+    complemento: Array || "Sem complemento",
     quantidade: "1"
   });
   function slider(etapa) {
@@ -139,6 +139,15 @@ function FazerPedido() {
     refEtapa.current.etapa = 0;
     slider(0);
     setPedidoPessoa(current => [...current, marmita]);
+    setMarmita({
+      arrozEscolhido: "Sem arroz",
+      feijaoEscolhido: "Sem feijão",
+      salada: "Sem salada",
+      macarrao: "Sem macarrão",
+      carne: Array || "Sem carne",
+      complemento: Array || "Sem complemento",
+      quantidade: "1"
+    })
 
   }
   const onFinalizar = async (event) => {
@@ -184,12 +193,12 @@ function FazerPedido() {
     document.getElementById('6').setAttribute('hidden', true); // alterar ao adicionar uma nova etapa.
     document.getElementById('mostrarId').removeAttribute('hidden');
     document.getElementById('avançar').setAttribute('hidden', true);
-    document.getElementById('voltar').setAttribute('hidden',true);
-    document.getElementById('finalizar').setAttribute('hidden',true);
+    document.getElementById('voltar').setAttribute('hidden', true);
+    document.getElementById('finalizar').setAttribute('hidden', true);
     document.getElementById('novo').removeAttribute('hidden');
-    await setTimeout(function(){
+    await setTimeout(function () {
       navigate('/');
-  }, 60000);
+    }, 60000);
   }
   function UmaMarmita(props) {
     return <Marmita
@@ -218,7 +227,7 @@ function FazerPedido() {
     )
   }
 
-  const onNovoPedido = (e)=>{
+  const onNovoPedido = (e) => {
     e.preventDefault();
     window.location.reload();
   }

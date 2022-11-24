@@ -1,5 +1,18 @@
 const express = require("express");
 const router = express.Router();
+const mongoose = require("mongoose");
+
+const Pedido = mongoose.model('Pedido', {
+  _id: String,
+  liberadoParaCozinha: Boolean,
+  marmitas: Array,
+  quantidadeTotal: Number
+});
+
+const MarmitaVendida = mongoose.model('MarmitasVendidas', {
+  _id: String,
+  quantidade: Number
+});
 
 router.get("/pedidos", async (req, res) => {
   const pedidos = await Pedido.find({ liberadoParaCozinha: false })
@@ -22,8 +35,8 @@ router.post("/pedidos", (req, res) => {
   res.send(resposta);
 });
 
-router.put("/pedidos/liberar",async (req, res) => {
-    const dataAtual = new Date().toLocaleDateString();
+router.put("/pedidos/liberar", async (req, res) => {
+  const dataAtual = new Date().toLocaleDateString();
   MarmitaVendida.countDocuments({ _id: dataAtual }, function (err, count) {
     if (count > 0) {
       console.log("Data atual salva");
@@ -71,14 +84,14 @@ router.put("/pedidos/liberar",async (req, res) => {
 });
 
 router.delete("/pedidos", (req, res) => {
-    try {
-        Pedido.deleteOne({ _id: req.body._id }, (err) => {
-          if (err) return handleError(err);
-        });
-        res.send("success");
-      } catch (error) {
-        res.send(error);
-      }
+  try {
+    Pedido.deleteOne({ _id: req.body._id }, (err) => {
+      if (err) return handleError(err);
+    });
+    res.send("success");
+  } catch (error) {
+    res.send(error);
+  }
 });
 
-module.exports = router;
+module.exports = { router, MarmitaVendida };
